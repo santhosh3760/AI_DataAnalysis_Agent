@@ -4,6 +4,8 @@ from openai import OpenAI
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
+from dotenv import load_dotenv
 
 # ClickHouse connection details
 CLICKHOUSE_CONFIG = {
@@ -134,14 +136,16 @@ def generate_visualizations(data: pd.DataFrame, user_query: str, api_key: str):
 
 def main():
     st.title("Trade Data Analysis Agent")
+    # Load environment variables from .env file
+    load_dotenv()
+    api_key = os.getenv('OPENAI_API_KEY')
+    # st.sidebar.text_input("Enter your OpenAI API key:", type="password")
+    # if not api_key:
+    #     st.warning("Please enter your OpenAI API key in the sidebar to proceed.")
+    #     st.stop()
     
-    api_key = st.sidebar.text_input("Enter your OpenAI API key:", type="password")
-    if not api_key:
-        st.warning("Please enter your OpenAI API key in the sidebar to proceed.")
-        st.stop()
-    
-    if 'openai_api_key' not in st.session_state:
-        st.session_state.openai_api_key = api_key
+    # if 'openai_api_key' not in st.session_state:
+    #     st.session_state.openai_api_key = api_key
     
     if 'agent' not in st.session_state:
         st.session_state.agent = DatabaseAgent()
